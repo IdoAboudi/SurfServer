@@ -22,6 +22,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -38,6 +41,18 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.listen(8080);
+
+//server routes
+app.route('/api/products').get((req,res) => {
+    //right now sending static - TODO: create db model to get data
+    res.send({name: 'Product1', description: 'Product Description No.1'});
+})
 
 module.exports = app;
