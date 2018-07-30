@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../model/dal');
+var db = require('../model/dal/dal');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
