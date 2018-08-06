@@ -1,6 +1,10 @@
+var Product = require('../product.js')
 
 
-const MongoClient = require('mongodb').MongoClient;
+
+const mongo = require('mongodb');
+const MongoClient = mongo.MongoClient;
+
 var client,db;
 
 async function connect() {
@@ -41,7 +45,7 @@ async function test(){
     await printAllProducts();
 
     console.log(`- testing deleting all products -`);
-    await deleteAllProducts();
+    // await deleteAllProducts();
     await printAllProducts();
 
     console.log(`- disconnecting from db -`);
@@ -61,7 +65,6 @@ async function deleteAllProducts(){
 
 async function insertProduct(product){
     try{
-
         let collection = db.collection('products');
         await collection.insertOne(product);
         console.log(`Inserted product of id : ${product._id}`);
@@ -81,18 +84,33 @@ async function insertProduct(product){
 async function getProduct(id){
     try{
         let collection = db.collection('products');
-        let product = await collection.findOne({_id: id});
+        let id_o = new mongo.ObjectID(id);
+        let product = await collection.findOne({'_id': id_o});
         return product;
     } catch (error) {
-        console.log(`Error getting product of id ${id}`);
+        console.log(`Error getting product of id ${id} ${error}`);
     }
+}
+
+async function updateProduct(product){
+    let collection = db.collection("products");
+    let id_o = new mongo.ObjectID(product['_id']);
+    let newValues = {};
+    for (key in product){
+        if(key != '_id'){
+            newValues[key] = product[key];
+        }
+    }
+    await collection.updateOne({'_id': id_o},{$set: newValues});
 }
 
 async function deleteProduct(id){
     try{
         let collection = db.collection('products');
-        await collection.deleteOne({_id: id});
-        console.log(`Deleted product of id ${id}`);
+        let id_o = new mongo.ObjectID(id);
+        let result = await collection.deleteOne({_id: id_o});
+        console.log(`Deleted ${result.result.n} from DB`);
+        return {'success': true};
     } catch (error) {
         console.error(`Error deleting product of id ${id} : ${error}`);
     }
@@ -116,7 +134,7 @@ async function getAllProducts(){
     try{
         let collection = db.collection(`products`);
         let products = await collection.find({}).toArray();
-        console.log(`Fetched all products`);
+        products.map(p => new Product.Product(p._id, p.name, p.description));
         return products;
     } catch (error) {
         console.error(`Error getting all products ${error}`);
@@ -140,3 +158,4 @@ exports.insertProduct = insertProduct;
 exports.insertMany = insertMany;
 exports.deleteProduct = deleteProduct;
 exports.getProduct = getProduct;
+exports.updateProduct = updateProduct;
