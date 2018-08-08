@@ -1,6 +1,6 @@
 let app = require('express')();
 let http = require('http').Server(app);
-
+var appDal = require('../model/dal/dal');
 let io = require('socket.io')(http);
 
 io.on('connection', (socket) => {
@@ -20,8 +20,9 @@ io.on('connection', (socket) => {
     //     console.log("Message Received: " + message);
     //     io.emit('message', {type:'new-message', text: message});
     // });
-    socket.on('stats', (compName) => {
-        console.log("counter+1 to " + compName );
+    socket.on('viewProduct', (product) => {
+        console.log("Productview productname " + product );
+        appDal.updateProduct(product);
         //add to DB of compName +1
         //io.emit('stats', {type:'new-message', text: message});
     });

@@ -110,6 +110,7 @@ async function getProduct(id){
     }
 }
 
+
 async function updateProduct(product){
     let collection = db.collection("products");
     let id_o = new mongo.ObjectID(product['_id']);
@@ -192,3 +193,5 @@ exports.deleteProduct = deleteProduct;
 exports.getProduct = getProduct;
 exports.getAllProductsByHand = getAllProductsByHand;
 exports.checkLogin = checkLogin
+exports.getProductView = getProductView;
+exports.updateProduct = updateProduct;
