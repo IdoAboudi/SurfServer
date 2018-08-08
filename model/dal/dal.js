@@ -176,3 +176,4 @@ exports.insertProduct = insertProduct;
 exports.insertMany = insertMany;
 exports.deleteProduct = deleteProduct;
 exports.getProduct = getProduct;
+exports.getAllProductsByHand = getAllProductsByHand;
