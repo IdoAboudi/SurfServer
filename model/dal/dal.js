@@ -53,6 +53,24 @@ async function test(){
     process.exit(0);
 }
 
+async function getAllProductsByHand(){
+    try{
+        let collection = db.collection(`products`);
+        let products = await collection.aggregate([{
+          "$match":{}
+        },{
+            "$group":
+                {
+                    "_id" : "$hand",
+                    "avgPrice": {"$avg": {"$convert": {input: "$price", to: "int"}}}
+                }
+        }]).toArray();
+        return products;
+    } catch (error) {
+        console.error(`Error getting all products grouped by hand ${error}`);
+    }
+}
+
 async function deleteAllProducts(){
     try{
         let collection = db.collection('products');
@@ -70,13 +88,11 @@ async function insertProduct(product){
         console.log(`Inserted product of id : ${product._id}`);
 
     } catch (error) {
-
         if(error.toString().includes('duplicate key')){
             console.log(`Ignoring duplicate key insertion`);
         } else {
             console.error(`Error inserting product to DB : ${error}`)
         }
-
     }
 
 }
@@ -134,7 +150,6 @@ async function getAllProducts(){
     try{
         let collection = db.collection(`products`);
         let products = await collection.find({}).toArray();
-        products.map(p => new Product.Product(p._id, p.name, p.description));
         return products;
     } catch (error) {
         console.error(`Error getting all products ${error}`);
@@ -154,6 +169,7 @@ async function disconnect(){
 exports.connect = connect;
 exports.disconnect = disconnect;
 exports.getAllProducts = getAllProducts;
+exports.getAllProductsByHand = getAllProductsByHand;
 exports.insertProduct = insertProduct;
 exports.insertMany = insertMany;
 exports.deleteProduct = deleteProduct;
