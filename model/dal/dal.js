@@ -193,5 +193,4 @@ exports.deleteProduct = deleteProduct;
 exports.getProduct = getProduct;
 exports.getAllProductsByHand = getAllProductsByHand;
 exports.checkLogin = checkLogin
-exports.getProductView = getProductView;
 exports.updateProduct = updateProduct;
