@@ -26,5 +26,9 @@ router.post('/product/update', async function(req,res,next){
     res.send(await appDal.updateProduct(req.body));
 });
 
+router.get('/login/:username/:password', async function(req,res,next){
+    res.send(await appDal.checkLogin(req.params.username,req.params.password));
+});
+
 
 module.exports = router;

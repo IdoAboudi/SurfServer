@@ -160,6 +160,20 @@ async function getAllProducts(){
 
 }
 
+async function checkLogin(username,password){
+    let collection = db.collection('admins');
+    let admin = await collection.findOne({"_id": username});
+    if(admin && admin.password === password){
+        return "TRUE";
+    } else return "FALSE";
+}
+
+async function insertAdmin(username,password){
+    let collection = db.collection('admins');
+    await collection.insert({"_id": username, "password":password});
+    console.log(`inserted admin ${username}`);
+}
+
 async function printAllProducts(){
     let currentProductsInDb = await getAllProducts();
     console.log('Products: ' + JSON.stringify(currentProductsInDb,null,'\t'));
@@ -177,3 +191,4 @@ exports.insertMany = insertMany;
 exports.deleteProduct = deleteProduct;
 exports.getProduct = getProduct;
 exports.getAllProductsByHand = getAllProductsByHand;
+exports.checkLogin = checkLogin
