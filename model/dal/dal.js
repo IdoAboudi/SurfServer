@@ -192,5 +192,5 @@ exports.insertMany = insertMany;
 exports.deleteProduct = deleteProduct;
 exports.getProduct = getProduct;
 exports.getAllProductsByHand = getAllProductsByHand;
-exports.checkLogin = checkLogin
+exports.checkLogin = checkLogin;
 exports.updateProduct = updateProduct;
